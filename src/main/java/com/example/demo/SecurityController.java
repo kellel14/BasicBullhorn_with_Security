@@ -88,18 +88,18 @@ public class SecurityController {
 
 
 //    message controller stuff
+//
+//    @RequestMapping("/")
+//    public String index(){
+//        return "index";
+//    }
 
     @RequestMapping("/")
-    public String index(){
-        return "index";
-    }
+    public String listMessages(Model model){
+        model.addAttribute("messages", messageRepository.findAll());
 
-//    @RequestMapping("/")
-//    public String listMessages(Model model){
-//        model.addAttribute("messages", messageRepository.findAll());
-//
-//        return "msgList";
-//    }
+        return "msgList";
+    }
 
     @GetMapping("/add")
     public String MsgForm(Model model){
@@ -162,7 +162,7 @@ public class SecurityController {
         return "msgForm";
     }
 
-    @RequestMapping("add .")
+    @RequestMapping("/delete/{id}")
     public String deleteMessages(@PathVariable("id") long id){
         messageRepository.deleteById(id);;
         return "redirect:/";
