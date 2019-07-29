@@ -1,11 +1,18 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+
+    <th:block th:insert="base :: header"></th:block>
 </head>
 <body>
+
+<div th:replace="base :: navbar"></div>
+
 <h2>Insecure Page</h2>
-<a href="/secure">Secure Page</a>
+<a href="/secure">Secure Page (once called "It works")</a>
 </body>
 </html>

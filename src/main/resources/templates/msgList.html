@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Message List</title>
+
+    <th:block th:insert="base :: header"></th:block>
+
+    <link rel="stylesheet" type="text/css" href="css/StyleMsgList.css">
+
+</head>
+<style >
+
+
+</style>
+<body>
+
+<div th:replace="base :: navbar"></div>
+
+<div class="container-fluid">
+
+    <a href="/add">New Message</a>
+
+    <div sec:authorize="hasAuthority('USER')">
+
+
+    <table cellspacing="20">
+        <tr>
+            <th>Title</th>
+            <th>Content</th>
+            <th>Date Posted</th>
+            <th>Posted By</th>
+            <td>Actions</td>
+        </tr>
+
+        <tr th:each="message : ${messages}">
+            <div class="container-fluid">
+                <td th:text="${message.title}"></td>
+            </div>
+
+            <div class="container-fluid" align="center">
+                <td th:text="${message.content}"></td>
+            </div>
+
+            <br/>
+            <td th:text="${message.postedDate}"></td>
+            <td th:text="${message.postedBy}"></td>
+
+            <td>
+                <a th:href="@{/update/{id}(id=${message.id})}">Update</a> -
+                <a th:href="@{/detail/{id}(id=${message.id})}">Details</a> -
+                <a th:href="@{/delete/{id}(id=${message.id})}">Delete</a>
+            </td>
+
+        </tr>
+
+    </table>
+
+</div>
+
+</div>
+</body>
+</html>
