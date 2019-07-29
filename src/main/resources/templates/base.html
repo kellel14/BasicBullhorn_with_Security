@@ -39,11 +39,11 @@
                         </a>
                     </li>
                     <!--should show permanently while logged in-->
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Welcome #2
-                            <span sec:authentication="name"></span>
-                        </a>
-                    </li>
+                    <!--<li class="nav-item">-->
+                        <!--<a class="nav-link" href="#">Welcome #2-->
+                            <!--<span sec:authentication="name"></span>-->
+                        <!--</a>-->
+                    <!--</li>-->
 
                     <li class="nav-item">
                         <a class="nav-link" href="/">Home</a>
@@ -63,17 +63,17 @@
                     </li>
 
                     <!--test dropdown menu-->
-                    <!--<li class="nav-item dropdown">-->
-                        <!--<a class="nav-link dropdown-toggle" href="/Menu" id="navbarDropdownMenuLink"-->
-                           <!--data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">-->
-                            <!--Menu-->
-                        <!--</a>-->
-                        <!--<div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">-->
-                            <!--<a class="dropdown-item" href="/">Home</a>-->
-                            <!--<a class="dropdown-item" href="/add">New Message</a>-->
-                            <!--<a class="dropdown-item" href="">Button</a>-->
-                        <!--</div>-->
-                    <!--</li>-->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="/Menu" id="navbarDropdownMenuLink"
+                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Menu
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                            <a class="dropdown-item" href="/">Home</a>
+                            <a class="dropdown-item" href="/add" sec:authorize="!isAuthenticated()">New Message</a>
+                            <a class="dropdown-item" href="/register" sec:authorize="!isAuthenticated()">Register</a>
+                        </div>
+                    </li>
                 </ul>
             </div>
         </nav>

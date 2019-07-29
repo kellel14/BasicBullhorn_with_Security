@@ -10,6 +10,24 @@ import java.util.Date;
 
 @Entity
 public class Message {
+
+
+    @ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public Message(User user) {
+        this.user = user;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
@@ -34,6 +52,8 @@ public class Message {
     @Size(min=3)
     private String postedBy;
 
+    private String photo;
+
 //    public Message(@NotNull @Size(min = 4) String title,
 //                   @NotNull @Size(min = 3) String content,
 //                   @NotNull @Size(min = 3) String postedDate,
@@ -43,6 +63,15 @@ public class Message {
 //        this.postedDate = postedDate;
 //        this.postedBy = postedBy;
 //    }
+
+
+    public String getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(String photo) {
+        this.photo = photo;
+    }
 
     public Message() {
     }

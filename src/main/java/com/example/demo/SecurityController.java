@@ -1,21 +1,25 @@
 package com.example.demo;
 
+import com.cloudinary.utils.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+import java.io.IOException;
 import java.security.Principal;
+import java.util.Map;
 
 @Controller
 public class SecurityController {
 
 //    to link cloudinary config
 
-//    @Autowired
-//    CloudinaryConfig cloudc;
+    @Autowired
+    CloudinaryConfig cloudc;
 
 
     @Autowired
@@ -58,13 +62,10 @@ public class SecurityController {
             userService.saveUser(user);
             model.addAttribute("message", "User Account Created");
         }
-        return "index";
+        return "redirect:/login";
     }
 
-    @RequestMapping("/")
-    public String index(){
-        return "index";
-    }
+
 
     @RequestMapping("/login")
     public String login(){
@@ -88,13 +89,17 @@ public class SecurityController {
 
 //    message controller stuff
 
-
-
-    @RequestMapping("/home")
-    public String listMessages(Model model){
-        model.addAttribute("messages", messageRepository.findAll());
-        return "msgList";
+    @RequestMapping("/")
+    public String index(){
+        return "index";
     }
+
+//    @RequestMapping("/")
+//    public String listMessages(Model model){
+//        model.addAttribute("messages", messageRepository.findAll());
+//
+//        return "msgList";
+//    }
 
     @GetMapping("/add")
     public String MsgForm(Model model){
@@ -102,12 +107,36 @@ public class SecurityController {
         return "msgForm";
     }
 
-    @PostMapping("/process")
-    public String processMsgForm(@Valid Message message,
-                                 BindingResult result){
-        if (result.hasErrors()){
-            return "msgForm";
+
+
+    @PostMapping("/add")
+    public String processMessage(@ModelAttribute Message message,
+                                 @RequestParam("file") MultipartFile file){
+        if (file.isEmpty()) {
+            message.setUser(userService.getUser());
+            messageRepository.save(message);
+            return "redirect:/";
         }
+        try{
+            Map uploadResult = cloudc.upload(file.getBytes(),
+                    ObjectUtils.asMap("resourcetype", "auto"));
+            message.setPhoto(uploadResult.get("url").toString());
+            message.setUser(userService.getUser());
+            messageRepository.save(message);
+        }catch (IOException e){
+            e.printStackTrace();
+            return "redirect:/add";
+        }
+        return  "redirect:/";
+    }
+
+//    @PostMapping("/add")
+//    public String processMsgForm(@Valid Message message,
+//                                 BindingResult result){
+//        if (result.hasErrors()){
+//            return "msgForm";
+//        }
+
 
 //        Date date = new Date();
 //        try{
@@ -117,9 +146,9 @@ public class SecurityController {
 //            e.printStackTrace();
 //        }
 //        message.setPosteddate(date);
-        messageRepository.save(message);
-        return "redirect:/";
-    }
+//        messageRepository.save(message);
+//        return "redirect:/";
+//    }
 
     @RequestMapping("/detail/{id}")
     public String showMessages(@PathVariable("id") long id, Model model){
@@ -133,13 +162,13 @@ public class SecurityController {
         return "msgForm";
     }
 
-    @RequestMapping("/delete/{id}")
+    @RequestMapping("add .")
     public String deleteMessages(@PathVariable("id") long id){
         messageRepository.deleteById(id);;
         return "redirect:/";
     }
-
-//    @RequestMapping ("/viewprofile")
+//create profile page...
+//    @RequestMapping ("/view")
 //    public String editprofile (Model model){
 //        model.addAttribute("user",userService.getUser());
 //        return "profile";
